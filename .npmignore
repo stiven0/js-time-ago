@@ -1,0 +1,11 @@
+# npm
+node_modules/
+package-lock.json
+
+# code-dev
+src/
+nodemon.json
+tsconfig.json
+
+# git
+.gitignore
