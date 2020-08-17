@@ -73,7 +73,7 @@ getTime( Date.now() - 60 * 60 * 1000, 'en' );
 
 ## Local
 
-Actualmente se tiene soporte para dos idiomas:
+Currently there is support for two languages:
 - en - English
 - es - Spanish
 
