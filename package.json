@@ -16,7 +16,11 @@
   ],
   "dependencies": {},
   "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "jest": "^26.4.0",
     "nodemon": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.2.0",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
   },
@@ -29,7 +33,10 @@
   },
   "homepage": "https://github.com/stiven0/js-time-ago#readme",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean-dist": "rimraf dist",
+    "clean-coverage": "rimraf coverage",
+    "test": "jest --watch",
+    "test:coverage": "jest --coverage",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "npm run build && node dist/index.js"

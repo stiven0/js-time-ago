@@ -84,14 +84,3 @@ export const yearsEs = ( year: number ): string => {
     }
     
 };
-
-export const centurysEs = ( century: number ): string => {
-
-    if ( century === 1 ) {
-        return 'Hace 1 siglo';
-
-    } else {
-        return `Hace ${ century } siglos`;
-    }
-    
-};

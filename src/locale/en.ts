@@ -30,7 +30,7 @@ export const minutesEn = ( minute: number ): string => {
 export const hoursEn = ( hour: number ): string => {
 
     if ( hour === 1 ) {
-        return '1 hour ago ';
+        return '1 hour ago';
 
     } else {
         return `${ hour } hours ago`;
@@ -82,15 +82,4 @@ export const yearsEn = ( year: number ): string => {
         return `${ year } years ago`;
     }
 
-};
-
-export const centurysEn = ( century: number ): string => {
-
-    if ( century === 1 ) {
-        return '1 century ago';
-
-    } else {
-        return `${ century } centuries ago`;
-    }
-    
 };

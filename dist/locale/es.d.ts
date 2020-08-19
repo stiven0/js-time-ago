@@ -5,5 +5,4 @@ export declare const daysEs: (day: number) => string;
 export declare const weeksEs: (week: number) => string;
 export declare const monthsEs: (month: number) => string;
 export declare const yearsEs: (year: number) => string;
-export declare const centurysEs: (century: number) => string;
 //# sourceMappingURL=es.d.ts.map

@@ -12,7 +12,11 @@
     "esModuleInterop": true,      
     "inlineSourceMap": true,               
     "inlineSources": true,                 
-    "forceConsistentCasingInFileNames": true  
-    
-  }
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": [
+    "_tests_",
+    "**/*.spec.ts"
+  ]
+  
 }
