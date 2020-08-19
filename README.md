@@ -1,6 +1,7 @@
 # js-time-ago
 
 [![npm version](https://img.shields.io/npm/v/js-time-ago.svg?style=flat-square)](https://www.npmjs.com/package/js-time-ago)
+[![npm downloads](https://img.shields.io/npm/dw/js-time-ago.svg?style=flat-square)](https://www.npmjs.com/package/js-time-ago)
 
 Easily determine how long ago an event occurred, only for past dates
 
@@ -31,7 +32,7 @@ you will get a result like this:
 - _hace 2 años_
 
 
-## Installation
+## Installation 🔧
 
 This package is available through [npm registration](https://www.npmjs.com/).
 
@@ -41,7 +42,7 @@ npm i js-time-ago
 ```
 
 
-## Usage
+## Usage 🚀
 
 ```
 
@@ -82,6 +83,6 @@ Currently there is support for two languages:
 
 
 
-## License
+## License 📄
 
   [MIT](LICENSE)
