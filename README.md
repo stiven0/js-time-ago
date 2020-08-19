@@ -46,6 +46,8 @@ npm i js-time-ago
 
 ```
 
+const { format } = require('js-time-ago');
+//  or  //
 import { format } from 'js-time-ago';
 
 // we specify the date and the language in which we will receive the answer
