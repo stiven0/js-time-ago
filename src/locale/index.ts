@@ -1,3 +1,4 @@
+
 export { secondsEs, minutesEs, 
          hoursEs,   daysEs, 
          weeksEs,   monthsEs, 
@@ -5,5 +6,10 @@ export { secondsEs, minutesEs,
 
 export { secondsEn, minutesEn,
          hoursEn,   daysEn,
-         weeksEn, monthsEn,
+         weeksEn,   monthsEn,
          yearsEn } from './en';
+
+export { secondsPt, minutesPt,
+         hoursPt,   daysPt,
+         weeksPt,   monthsPt,
+         yearsPt } from './pt';

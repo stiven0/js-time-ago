@@ -18,18 +18,28 @@ you will get a result like this:
 - _1 week ago_
 - _1 month ago_
 - _1 year ago_
-- _2 years ago_
 
 **Spanish**
 
 - _justo ahora_
 - _hace 10 segundos_
 - _hace 1 minuto_
+- _hace 1 hora_
 - _hace 1 dia_
 - _hace 1 semana_
 - _hace 1 mes_
 - _hace 1 año_
-- _hace 2 años_
+
+**Portuguese**
+
+- _justo agora_
+- _10 segundos atrás_
+- _1 minuto atrás_
+- _1 hora atrás_
+- _1 dia atrás_
+- _1 semana atrás_
+- _1 mês atrás_
+- _Há 1 ano_
 
 
 ## Installation 🔧
@@ -44,7 +54,7 @@ npm i js-time-ago
 
 ## Usage 🚀
 
-```
+```js
 
 const { format } = require('js-time-ago');
 //  or  //
@@ -60,6 +70,7 @@ format( Date.now(), 'en' )
 (async () => {
 
     const response = await format( Date.now() - 60 * 1000, 'es' );
+    console.log( response );
     // Hace 1 minuto
 
 })();
@@ -67,18 +78,20 @@ format( Date.now(), 'en' )
 
 const getTime =  async (time, local) => {
     const response = await format( time, local ); 
-    // 1 hour ago
+    console.log( response );
+    // Há 1 ano
 };
 
-getTime( Date.now() - 60 * 60 * 1000, 'en' ); 
+getTime( Date.now() -  365 * 24 * 60 * 60 * 1000, 'pt' );  
 
 ```
 
 ## Local
 
-Currently there is support for two languages:
+Currently there is support for three languages:
 - en - English
 - es - Spanish
+- pt - Portuguese
 
 **Feel free to clone or download the code and add new languages ​​or try whatever you want.**
 

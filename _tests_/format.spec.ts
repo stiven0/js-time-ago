@@ -185,3 +185,95 @@ describe('format - spanish', () => {
 
 });
 
+describe('format - portuguese', () => {
+
+    test('should return a resolve', async () => {
+
+        await expect( format( Date.now(), 'pt' ) ).resolves.toBeTruthy();
+
+    });
+
+    test('should return a resolve that contains - justo agora', async () => {
+
+        const response = await format( Date.now(), 'pt' );
+        expect( response ).toContain( 'justo agora' );
+
+    });
+
+    test('should return a resolve theat contains - 1 segundo atrás', async () => {
+
+        const response = await format( Date.now() - 1 * 1000, 'pt' );
+        expect( response ).toContain('1 segundo atrás');
+
+    });
+
+    test('should return a resolve theat contains - 1 minuto atrás', async () => {
+
+        const response = await format( Date.now() - 60 * 1000, 'pt' );
+        expect( response ).toContain('1 minuto atrás');
+
+    });
+
+    test('should return a resolve theat contains - 1 hora atrás', async () => {
+
+        const response = await format( Date.now() - 60 * 60 * 1000, 'pt' );
+        expect( response ).toContain('1 hora atrás');
+
+    });
+
+    test('should return a resolve theat contains - 1 dia atrás', async () => {
+
+        const response = await format( Date.now() - 24 * 60 * 60 * 1000, 'pt' );
+        expect( response ).toContain('1 dia atrás');
+
+    });
+
+    test('should return a resolve theat contains - 1 semana atrás', async () => {
+
+        const response = await format( Date.now() - 7 * 24 * 60 * 60 * 1000, 'pt' );
+        expect( response ).toContain('1 semana atrás');
+
+    });
+
+    test('should return a resolve theat contains - 1 mês atrás', async () => {
+
+        const response = await format( Date.now() - 30.44 * 24 * 60 * 60 * 1000, 'pt' );
+        expect( response ).toContain('1 mês atrás');
+
+    });
+
+    test('should return a resolve theat contains - Há 1 ano', async () => {
+
+        const response = await format( Date.now() - 365 * 24 * 60 * 60 * 1000, 'pt' );
+        expect( response ).toContain('Há 1 ano');
+
+    });   
+
+    test('should return a resolve of type string', async () => {
+
+        const response = await format(Date.now() - 60 * 1000, 'pt');
+        expect(typeof response).toBe('string');
+
+    });
+
+    test('should return a rejection containing - Error, date received incorrect', async () => {
+
+        await expect( format( Date.now() + 60 * 1000, 'pt' )  ).rejects.toContain('Error, date received incorrect');
+
+    });
+
+    test('should return a reject', async () => {
+
+        await expect( format( Date.now() + 60 * 1000, 'pt' )  ).rejects.toBeTruthy();
+
+    });
+
+    test('should return a rejection containing - unsupported time', async () => {
+
+        const time = '12233444';
+        await expect( format( time as any, 'pt' ) ).rejects.toEqual('unsupported time');
+
+    });
+
+});
+

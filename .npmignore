@@ -1,5 +1,4 @@
 # npm
-node_modules/
 package-lock.json
 
 # dev
@@ -10,6 +9,7 @@ tsconfig.json
 # tests
 _tests_
 jest.config.js 
+coverage
 
 # git
 .gitignore
