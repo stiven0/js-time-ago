@@ -21,14 +21,14 @@ you will get a result like this:
 
 **Spanish**
 
-- _justo ahora_
-- _hace 10 segundos_
-- _hace 1 minuto_
-- _hace 1 hora_
-- _hace 1 dia_
-- _hace 1 semana_
-- _hace 1 mes_
-- _hace 1 año_
+- _Justo ahora_
+- _Hace 10 segundos_
+- _Hace 1 minuto_
+- _Hace 1 hora_
+- _Hace 1 dia_
+- _Hace 1 semana_
+- _Hace 1 mes_
+- _Hace 1 año_
 
 **Portuguese**
 
@@ -82,7 +82,27 @@ const getTime =  async (time, local) => {
     // Há 1 ano
 };
 
-getTime( Date.now() -  365 * 24 * 60 * 60 * 1000, 'pt' );  
+getTime( Date.now() -  365 * 24 * 60 * 60 * 1000, 'pt' );
+
+// use with angular pipe
+
+import { Pipe, PipeTransform } from '@angular/core';
+import { format } from 'js-time-ago';
+
+@Pipe({
+    name: 'jstimeago'
+})
+
+export class JsTimeAgoPipe implements PipeTransform {
+
+    async transform(date: number | Date): Promise<string> {
+        return await format( date, 'es' );
+    }
+}
+
+// import pipe in declarations and use it in html component
+<span>{{ date | jstimeago | async }}</span>
+
 
 ```
 
@@ -92,9 +112,6 @@ Currently there is support for three languages:
 - en - English
 - es - Spanish
 - pt - Portuguese
-
-**Feel free to clone or download the code and add new languages ​​or try whatever you want.**
-
 
 
 

@@ -3,7 +3,7 @@
 export const secondsEs = ( second: number ): string => {
     
     if ( +second === 0 ) {
-        return 'justo ahora';
+        return 'Justo ahora';
 
     }
     else if ( +second === 1 ) {
