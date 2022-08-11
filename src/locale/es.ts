@@ -43,10 +43,10 @@ export const hoursEs = ( hour: number ): string => {
 export const daysEs = ( day: number ): string => {
 
     if ( day === 1 ) {
-        return 'Hace 1 dia';
+        return 'Hace 1 día';
 
     } else {
-        return `Hace ${ day } dias`;
+        return `Hace ${ day } días`;
 
     }
     
