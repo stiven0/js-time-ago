@@ -3,44 +3,33 @@
 [![npm version](https://img.shields.io/npm/v/js-time-ago.svg?style=flat-square)](https://www.npmjs.com/package/js-time-ago)
 [![npm downloads](https://img.shields.io/npm/dw/js-time-ago.svg?style=flat-square)](https://www.npmjs.com/package/js-time-ago)
 
-Easily determine how long ago an event occurred, only for past dates
+> A simple and easy library to determine how long ago an event occurred or will occur
+## Language support
 
+Currently there is support for three languages:
+- en - English
+- es - Spanish
+- pt - Portuguese
 
 you will get a result like this:
 
-**English**
+**English by fault**
 
 - _right now_
 - _10 seconds ago_
+- _in 10 second_
 - _1 minute ago_
+- _in 1 minute_
 - _1 hour ago_
+- _in 1 hour_
 - _1 day ago_
+- _in 1 day_
 - _1 week ago_
+- _in 1 week_
 - _1 month ago_
+- _in 1 month_
 - _1 year ago_
-
-**Spanish**
-
-- _Justo ahora_
-- _Hace 10 segundos_
-- _Hace 1 minuto_
-- _Hace 1 hora_
-- _Hace 1 dia_
-- _Hace 1 semana_
-- _Hace 1 mes_
-- _Hace 1 año_
-
-**Portuguese**
-
-- _justo agora_
-- _10 segundos atrás_
-- _1 minuto atrás_
-- _1 hora atrás_
-- _1 dia atrás_
-- _1 semana atrás_
-- _1 mês atrás_
-- _Há 1 ano_
-
+- _in 1 year_
 
 ## Installation 🔧
 
@@ -48,7 +37,6 @@ This package is available through [npm registration](https://www.npmjs.com/).
 
 ```
 npm install js-time-ago
-npm i js-time-ago
 ```
 
 
@@ -69,9 +57,9 @@ format( Date.now(), 'en' )
 // support async / await
 (async () => {
 
-    const response = await format( Date.now() - 60 * 1000, 'es' );
+    const response = await format( Date.now() + 2 * 60 * 1000, 'es' );
     console.log( response );
-    // Hace 1 minuto
+    // dentro de 2 minutos
 
 })();
 
@@ -79,10 +67,10 @@ format( Date.now(), 'en' )
 const getTime =  async (time, local) => {
     const response = await format( time, local ); 
     console.log( response );
-    // Há 1 ano
+    // 1 mês atrás
 };
 
-getTime( Date.now() -  365 * 24 * 60 * 60 * 1000, 'pt' );
+getTime( Date.now() - 1 * 4 * 7 * 24 * 60 * 60 * 1000, 'pt' );
 
 // use with angular pipe
 
@@ -96,7 +84,7 @@ import { format } from 'js-time-ago';
 export class JsTimeAgoPipe implements PipeTransform {
 
     async transform(date: number | Date): Promise<string> {
-        return await format( date, 'es' );
+        return await format( date, 'en' );
     }
 }
 
@@ -106,14 +94,45 @@ export class JsTimeAgoPipe implements PipeTransform {
 
 ```
 
-## Local
+## Styles
 
-Currently there is support for three languages:
-- en - English
-- es - Spanish
-- pt - Portuguese
+List of supported "styles".
 
+### Round
 
+```js
+
+format( Date.now(), 'en', 'round' ).then( console.log );
+// right now
+
+format( Date.now() - 1 * 1000, 'en', 'round' ).then( console.log );
+// 1 second ago
+
+format( Date.now() - 1 * 60 * 60 * 1000, 'en', 'round' ).then( console.log );
+// 1 hour ago
+
+format( Date.now() - 1 * 7 * 24 * 60 * 60 * 1000, 'en', 'round' ).then( console.log );
+// 1 week ago
+
+```
+
+### Mini
+
+```js
+
+format( Date.now(), 'en', 'mini' ).then( console.log );
+// 0s
+
+format( Date.now() - 1 * 1000, 'en', 'mini' ).then( console.log );
+// 1s
+
+format( Date.now() - 1 * 60 * 60 * 1000, 'en', 'mini' ).then( console.log );
+// 1h
+
+format( Date.now() - 1 * 7 * 24 * 60 * 60 * 1000, 'en', 'mini' ).then( console.log );
+// 1week
+
+```
 
 ## License 📄
 

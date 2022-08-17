@@ -1,44 +1,17 @@
 import { monthsEs, monthsEn, monthsPt } from '../locale/index';
+import { isPastOrFuture } from '../types/is-past-or-future';
 import { locale } from '../types/locale';
+import { style } from '../types/style';
 
-export const months = ( month: number, local: locale ): string => {
+export const months = ( month: number, local: locale, isPastOrFuture: isPastOrFuture, style: style ): string => {
 
-    const monthsSplit = String( month ).split('.');
-
-    if ( +monthsSplit[0] === 1 ) {
-
-        switch ( local ) {
-
-                case 'es':
-                    return monthsEs( 1 );
-
-                case 'en':
-                    return monthsEn( 1 );
-
-                case 'pt':
-                    return monthsPt( 1 );
-
-                default: return monthsEn( 1 );
-
-        }
-
-    } else {
-
-        switch ( local ) {
-
-                case 'es':
-                    return monthsEs( +monthsSplit[0] );
-
-                case 'en':
-                    return monthsEn( +monthsSplit[0] );
-
-                case 'pt':
-                    return monthsPt( +monthsSplit[0] );
-
-                default: return monthsEn( +monthsSplit[0] );
-
-        }
-
+    month = Math.round( month );
+    
+    switch ( local ) {
+        case 'es': return monthsEs( month, isPastOrFuture, style );
+        case 'en': return monthsEn( month, isPastOrFuture, style );
+        case 'pt': return monthsPt( month, isPastOrFuture, style );
+        default:   return monthsEn( month, isPastOrFuture, style );
     }
 
 };

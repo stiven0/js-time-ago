@@ -1,1 +1,1 @@
-{"version":3,"file":"weeks.d.ts","sourceRoot":"","sources":["../../src/time/weeks.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,MAAM,EAAE,MAAM,iBAAiB,CAAC;AAEzC,eAAO,MAAM,KAAK,SAAW,MAAM,SAAS,MAAM,KAAI,MAwCrD,CAAC"}
+{"version":3,"file":"weeks.d.ts","sourceRoot":"","sources":["../../src/time/weeks.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,cAAc,EAAE,MAAM,4BAA4B,CAAC;AAC5D,OAAO,EAAE,MAAM,EAAE,MAAM,iBAAiB,CAAC;AACzC,OAAO,EAAE,KAAK,EAAE,MAAM,gBAAgB,CAAC;AAEvC,eAAO,MAAM,KAAK,SAAW,MAAM,SAAS,MAAM,mDAAkD,MAWnG,CAAC"}

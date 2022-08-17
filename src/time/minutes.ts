@@ -1,44 +1,17 @@
 import { minutesEs, minutesEn, minutesPt } from '../locale/index';
+import { isPastOrFuture } from '../types/is-past-or-future';
 import { locale } from '../types/locale';
+import { style } from '../types/style';
 
-export const minutes = ( minutes: number, local: locale ): string => {
+export const minutes = ( minutes: number, local: locale, isPastOrFuture: isPastOrFuture, style: style ): string => {
 
-    const minutesSplit = String( minutes ).split('.');
+       minutes = Math.round( minutes );
 
-   if ( +minutesSplit[0] === 1 ) {
-
-              switch ( local ) {
-
-                     case 'es':
-                            return minutesEs( 1 );
-
-                     case 'en':
-                            return minutesEn( 1 );
-
-                     case 'pt':
-                            return minutesPt( 1 );
-
-                     default: return minutesEn( 1 );
-
-              }   
-
-   } else {
-         
-              switch ( local ) {
-
-                     case 'es':
-                            return minutesEs( +minutesSplit[0] );
-
-                     case 'en':
-                            return minutesEn( +minutesSplit[0] );
-
-                     case 'pt':
-                            return minutesPt( +minutesSplit[0] );
-                     
-                     default: return minutesEn(+ minutesSplit[0] );
-
-              } 
-
-   }    
+       switch ( local ) {
+              case 'es': return minutesEs( minutes, isPastOrFuture, style );
+              case 'en': return minutesEn( minutes, isPastOrFuture, style );
+              case 'pt': return minutesPt( minutes, isPastOrFuture, style );
+              default:   return minutesEn( minutes, isPastOrFuture, style );
+       }
 
 };

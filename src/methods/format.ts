@@ -1,66 +1,52 @@
 import { seconds, minutes, hours, days, weeks, months, years } from '../time/index';
+import { calculateMinutes, calculateSeconds, calculateHours, calculateDays, calculateWeeks, calculateMonths, calculateYears } from '../utils/time-calculations';
+import { isPastOrFuture } from '../types/is-past-or-future';
 import { locale } from '../types/locale';
+import { style } from '../types/style';
 
 /**
- * This function allows to calculate the time since an event occurred
+ * This function allows you to calculate the time since an event occurred or will occur (valid for past and future dates)
  * 
  * @param {number|Date} time - Refers to the time we want to calculate in milliseconds
- * @param {locale} local - It refers to a specific type of language, example spanish-es, english-en, Portuguese-pt
- * @returns {Promise} returns a promise with the elapsed time from the event date (time) to the current moment
+ * @param {locale} local - It refers to a specific type of language, example spanish-es, english-en, portuguese-pt
+ * @param {style} [style] - (Optional) Refers to the output format of text can be 'round' or 'mini', by default it is 'round'
+ * @returns {Promise} returns a promise with the elapsed time or that will elapse from the event date (time) to the current moment
  */
 
-export const format = ( time: number | Date, local: locale ): Promise<string> => {
+export const format = ( time: number | Date, local: locale, style: style = 'round' ): Promise<string> => {
 
-    if ( typeof time === 'string' ) {
-            return Promise.reject('unsupported time');
-    }
+    return new Promise( (resolve, reject) => {
 
-    const currentDate: number = Date.now();
-    const difference: number = currentDate - +time; 
-    
+        if ( typeof time === 'string' || typeof time === 'boolean' ) reject('unsupported time');
 
-    if ( time > currentDate ) {
-            return Promise.reject('Error, date received incorrect');
+        const currentDate = Date.now();
+        const difference  = currentDate - +time;
+        let isPastOrFuture: isPastOrFuture;
+        isPastOrFuture = time > currentDate ? 'future' : 'past';
 
-    } else {
-        
-        if ( difference >= 0 && difference < 60000 ) {
-            // soconds                     
-            return Promise.resolve( seconds( difference / 1000, local ) );
+        if ( (isPastOrFuture === 'future' && difference > -60000) || (difference >= 0 && difference < 60000) ) {
+            resolve( seconds( calculateSeconds( difference ), local, isPastOrFuture, style ) );
 
-        }
-        else if ( difference >= 60000 && difference < 3600000 ) {
-            // minutes
-            return Promise.resolve( minutes( difference / ( 1000 * 60 ), local ) );
+        } else if ( (difference <= -60000 && difference > -3600000) || (difference >= 60000 && difference < 3600000) ) {
+            resolve( minutes( calculateMinutes( difference ), local, isPastOrFuture, style ) );
 
-        }
-        else if ( difference >= 3600000 && difference < 86400000 ) {
-            // hours
-            return Promise.resolve( hours( difference / ( 1000 * 60 * 60 ), local ) );
-            
-        }
-        else if ( difference >= 86400000 && difference < 604800000 ) {
-            // days
-            return Promise.resolve( days( difference / ( 1000 * 60 * 60 * 24 ), local ) )
+        } else if ( (difference <= -3600000 && difference > -86400000) || ( difference >= 3600000 && difference < 86400000 ) ) {
+            resolve( hours( calculateHours( difference ), local, isPastOrFuture, style ) );
 
-        }
-        else if ( difference >= 604800000 && difference <= 2419000000 ) {
-            // weeks
-            return Promise.resolve( weeks( difference / ( 1000 * 60 * 60 * 24 * 7 ), local ) );
+        } else if ( (difference <= -86400000 && difference > -604800000) || (difference >= 86400000 && difference < 604800000) ) {
+            resolve( days( calculateDays( difference ), local, isPastOrFuture, style ) );
 
-        }
-        else if ( difference > 2419000000 && difference <= 28910000000 ) {
-            // months            
-            return Promise.resolve( months( difference / ( 1000 * 60 * 60 * 24 * 7 * 4 ), local ) )
+        } else if ( (difference <= -604800000 && difference >= -2419000000) || (difference >= 604800000 && difference <= 2419000000) ) {
+            resolve( weeks( calculateWeeks( difference ), local, isPastOrFuture, style ) );
+
+        } else if ( (difference < -2419000000 && difference >= -28910000000) || (difference > 2419000000 && difference <= 28910000000) ) {
+            resolve( months( calculateMonths( difference ), local, isPastOrFuture, style ) );
 
         } else {
-            // years
-            return Promise.resolve( years( (difference / ( 1000 * 60 * 60 * 24 )) / 365, local ) )
-        }
-        
-    }
+            resolve( years( calculateYears( difference ), local, isPastOrFuture, style ) );
 
+        }
+
+    });
 
 };
-
-

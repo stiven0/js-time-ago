@@ -1,44 +1,17 @@
 import { yearsEs, yearsEn, yearsPt } from '../locale/index';
+import { isPastOrFuture } from '../types/is-past-or-future';
 import { locale } from '../types/locale';
+import { style } from '../types/style';
 
-export const years = ( year: number, local: locale ): string => {
+export const years = ( year: number, local: locale, isPastOrFuture: isPastOrFuture, style: style ): string => {
 
-    const yearsSplit = String( year ).split('.');
+    year = Math.round( year );
 
-    if ( +yearsSplit[0] === 0 || +yearsSplit[0] === 1) {
-        
-            switch ( local ) {
-
-                    case 'es':
-                        return yearsEs( 1 );
-
-                    case 'en':
-                        return yearsEn( 1 );
-
-                    case 'pt':
-                        return yearsPt( 1 );
-
-                    default: return yearsEn( 1 );
-
-            }
-
-    } else {
-        
-        switch ( local ) {
-
-                case 'es':
-                    return yearsEs( +yearsSplit[0] );
-
-                case 'en':
-                    return yearsEn( +yearsSplit[0] );
-
-                case 'pt':
-                    return yearsPt( +yearsSplit[0] );
-
-                default: return yearsEn( +yearsSplit[0] );
-
-        }
-
+    switch ( local ) {
+        case 'es': return yearsEs( year, isPastOrFuture, style );
+        case 'en': return yearsEn( year, isPastOrFuture, style );
+        case 'pt': return yearsPt( year, isPastOrFuture, style );
+        default:   return yearsEn( year, isPastOrFuture, style );
     }
 
 };

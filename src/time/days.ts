@@ -1,44 +1,17 @@
 import { daysEs, daysEn, daysPt } from '../locale/index';
+import { isPastOrFuture } from '../types/is-past-or-future';
 import { locale } from '../types/locale';
+import { style } from '../types/style';
 
-export const days = ( days: number, local: locale ): string => {
+export const days = ( days: number, local: locale, isPastOrFuture: isPastOrFuture, style: style ): string => {
 
-    const daysSplit = String( days ).split('.');
+    days = Math.round( days );
 
-    if ( +daysSplit[0] === 1 ) {
-
-            switch ( local ) {
-
-                    case 'es':
-                        return daysEs( 1 );
-
-                    case 'en':
-                        return daysEn( 1 );
-
-                    case 'pt':
-                        return daysPt( 1 );
-
-                    default: return daysEn( 1 );
-
-            }
-
-    } else {
-
-            switch ( local ) {
-
-                case 'es':
-                    return daysEs( +daysSplit[0] );
-
-                case 'en':
-                    return daysEn( +daysSplit[0] );
-
-                case 'pt':
-                    return daysPt( +daysSplit[0] );
-
-                default: return daysEn( +daysSplit[0] );
-
-        }
-
+    switch ( local ) {
+        case 'es': return daysEs( days, isPastOrFuture, style );
+        case 'en': return daysEn( days, isPastOrFuture, style );
+        case 'pt': return daysPt( days, isPastOrFuture, style );
+        default:   return daysEn( days, isPastOrFuture, style );
     }
 
 };
