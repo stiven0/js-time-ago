@@ -44,12 +44,9 @@ npm install js-time-ago
 
 ```js
 
-const { format } = require('js-time-ago');
-//  or  //
 import { format } from 'js-time-ago';
 
 // we specify the date and the language in which we will receive the answer
-
 format( Date.now(), 'en' )
     .then( console.log );
     // right now
@@ -64,7 +61,7 @@ format( Date.now(), 'en' )
 })();
 
 
-const getTime =  async (time, local) => {
+const getTime = async (time, local) => {
     const response = await format( time, local ); 
     console.log( response );
     // 1 mês atrás
@@ -73,7 +70,6 @@ const getTime =  async (time, local) => {
 getTime( Date.now() - 1 * 4 * 7 * 24 * 60 * 60 * 1000, 'pt' );
 
 // use with angular pipe
-
 import { Pipe, PipeTransform } from '@angular/core';
 import { format } from 'js-time-ago';
 

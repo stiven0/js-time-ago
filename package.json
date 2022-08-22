@@ -1,11 +1,10 @@
 {
     "name": "js-time-ago",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "description": "A simple and easy library to determine how long ago an event occurred or will occur",
     "author": "stiven0",
     "license": "MIT",
     "main": "dist/index.js",
-    "type": "commonjs",
     "types": "dist/index.d.ts",
     "keywords": [
         "timeago",
