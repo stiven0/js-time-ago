@@ -1,4 +1,4 @@
-import { format } from '../src/methods/index';
+import { format } from '../src/index';
 
 describe('format Portuguese-pt', () => {
 

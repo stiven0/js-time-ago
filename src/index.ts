@@ -1,1 +1,1 @@
-export { format } from './methods/index'; 
+export { format, formatSync } from './methods/index';

@@ -1,4 +1,4 @@
-import { format } from '../src/methods/index';
+import { format } from '../src/index';
 
 describe('format english-en', () => {
 
@@ -51,7 +51,7 @@ describe('format english-en', () => {
     test('should return a rejection containing - unsupported time', async () => {
 
         const time = '12233444';
-        await expect( format( time as any, locale ) ).rejects.toEqual('unsupported time');
+        await expect( format( time as any, locale ) ).rejects.toThrow('unsupported time');
 
     });
 
