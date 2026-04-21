@@ -1,1 +1,1 @@
-export { format, formatSync } from './format';
+export { format, formatSync, formatToParts, formatToPartsSync } from './format';
