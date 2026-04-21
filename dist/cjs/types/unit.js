@@ -1,0 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.unitsOrder = void 0;
+exports.unitsOrder = ['second', 'minute', 'hour', 'day', 'week', 'month', 'year'];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidW5pdC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy90eXBlcy91bml0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUVhLFFBQUEsVUFBVSxHQUFXLENBQUMsUUFBUSxFQUFFLFFBQVEsRUFBRSxNQUFNLEVBQUUsS0FBSyxFQUFFLE1BQU0sRUFBRSxPQUFPLEVBQUUsTUFBTSxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgdHlwZSB1bml0ID0gJ3NlY29uZCcgfCAnbWludXRlJyB8ICdob3VyJyB8ICdkYXknIHwgJ3dlZWsnIHwgJ21vbnRoJyB8ICd5ZWFyJztcclxuXHJcbmV4cG9ydCBjb25zdCB1bml0c09yZGVyOiB1bml0W10gPSBbJ3NlY29uZCcsICdtaW51dGUnLCAnaG91cicsICdkYXknLCAnd2VlaycsICdtb250aCcsICd5ZWFyJ107XHJcbiJdfQ==
