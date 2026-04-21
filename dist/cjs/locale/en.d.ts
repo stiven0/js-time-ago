@@ -1,3 +1,5 @@
+import { localeDict } from '../types/locale-dict';
+export declare const en: localeDict;
 import { isPastOrFuture } from "../types/is-past-or-future";
 import { style } from "../types/style";
 export declare const secondsEn: (second: number, isPastOrFuture: isPastOrFuture, style: style) => string;

@@ -1,4 +1,5 @@
-import { seconds, minutes, hours, days, weeks, months, years } from '../time/index';
+import '../locale/index'; // registra los built-in locales
+import { getLocaleDict } from '../locale/registry';
 import { isPastOrFuture } from '../types/is-past-or-future';
 import { formatOptions } from '../types/format-options';
 import { formatParts } from '../types/format-parts';
@@ -134,16 +135,18 @@ const unitToNumber = (difference: number, selectedUnit: unit, mode: rounding): n
 };
 
 const render = (value: number, selectedUnit: unit, local: locale, tense: isPastOrFuture, selectedStyle: style): string => {
-    switch (selectedUnit) {
-        case 'second': return seconds(value, local, tense, selectedStyle);
-        case 'minute': return minutes(value, local, tense, selectedStyle);
-        case 'hour': return hours(value, local, tense, selectedStyle);
-        case 'day': return days(value, local, tense, selectedStyle);
-        case 'week': return weeks(value, local, tense, selectedStyle);
-        case 'month': return months(value, local, tense, selectedStyle);
-        case 'year': return years(value, local, tense, selectedStyle);
-        default: return seconds(value, local, tense, selectedStyle);
+    const dict = getLocaleDict(local);
+    if (!dict) {
+        throw new Error(`locale '${local}' is not registered`);
     }
+
+    if (selectedUnit === 'second' && value === 0) {
+        return selectedStyle === 'mini' ? dict.nowMini : dict.now;
+    }
+
+    const unitDict = dict[selectedUnit];
+    if (selectedStyle === 'mini') return unitDict.mini(value);
+    return tense === 'past' ? unitDict.past(value) : unitDict.future(value);
 };
 
 const normalizeTime = (time: number | Date): number => {

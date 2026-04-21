@@ -1,3 +1,46 @@
+import { localeDict } from '../types/locale-dict';
+
+export const es: localeDict = {
+    now: 'justo ahora',
+    nowMini: '0s',
+    second: {
+        past:   (n) => n === 1 ? 'hace 1 segundo'      : `hace ${n} segundos`,
+        future: (n) => n === 1 ? 'dentro de 1 segundo' : `dentro de ${n} segundos`,
+        mini:   (n) => `${n}s`
+    },
+    minute: {
+        past:   (n) => n === 1 ? 'hace 1 minuto'       : `hace ${n} minutos`,
+        future: (n) => n === 1 ? 'dentro de 1 minuto'  : `dentro de ${n} minutos`,
+        mini:   (n) => `${n}m`
+    },
+    hour: {
+        past:   (n) => n === 1 ? 'hace 1 hora'         : `hace ${n} horas`,
+        future: (n) => n === 1 ? 'dentro de 1 hora'    : `dentro de ${n} horas`,
+        mini:   (n) => `${n}h`
+    },
+    day: {
+        past:   (n) => n === 1 ? 'hace 1 día'          : `hace ${n} días`,
+        future: (n) => n === 1 ? 'dentro de 1 día'     : `dentro de ${n} días`,
+        mini:   (n) => `${n}d`
+    },
+    week: {
+        past:   (n) => n === 1 ? 'hace 1 semana'       : `hace ${n} semanas`,
+        future: (n) => n === 1 ? 'dentro de 1 semana'  : `dentro de ${n} semanas`,
+        mini:   (n) => n === 1 ? '1semana' : `${n}semanas`
+    },
+    month: {
+        past:   (n) => n === 1 ? 'hace 1 mes'          : `hace ${n} meses`,
+        future: (n) => n === 1 ? 'dentro de 1 mes'     : `dentro de ${n} meses`,
+        mini:   (n) => n === 1 ? '1mes' : `${n}meses`
+    },
+    year: {
+        past:   (n) => n === 1 ? 'hace 1 año'          : `hace ${n} años`,
+        future: (n) => n === 1 ? 'dentro de 1 año'     : `dentro de ${n} años`,
+        mini:   (n) => n === 1 ? '1año' : `${n}años`
+    }
+};
+
+// --- Legacy exports (kept for backward compatibility) ---
 import { isPastOrFuture } from "../types/is-past-or-future";
 import { style } from "../types/style";
 

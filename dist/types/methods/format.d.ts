@@ -1,3 +1,4 @@
+import '../locale/index';
 import { formatOptions } from '../types/format-options';
 import { formatParts } from '../types/format-parts';
 import { locale } from '../types/locale';

@@ -1,4 +1,19 @@
-import { format, formatSync, formatToPartsSync } from '../src/index';
+import { format, formatSync, formatToPartsSync, registerLocale } from '../src/index';
+import type { localeDict } from '../src/index';
+
+// ── Locale custom (francés) registrado en runtime ─────────────────────────────
+const fr: localeDict = {
+    now: 'maintenant', nowMini: '0s',
+    second: { past: (n) => `il y a ${n}s`,    future: (n) => `dans ${n}s`,    mini: (n) => `${n}s`   },
+    minute: { past: (n) => `il y a ${n}m`,    future: (n) => `dans ${n}m`,    mini: (n) => `${n}m`   },
+    hour:   { past: (n) => `il y a ${n}h`,    future: (n) => `dans ${n}h`,    mini: (n) => `${n}h`   },
+    day:    { past: (n) => `il y a ${n}j`,    future: (n) => `dans ${n}j`,    mini: (n) => `${n}j`   },
+    week:   { past: (n) => `il y a ${n}sem`,  future: (n) => `dans ${n}sem`,  mini: (n) => `${n}sem` },
+    month:  { past: (n) => `il y a ${n}mois`, future: (n) => `dans ${n}mois`, mini: (n) => `${n}mois`},
+    year:   { past: (n) => `il y a ${n}ans`,  future: (n) => `dans ${n}ans`,  mini: (n) => `${n}ans` }
+};
+registerLocale('fr', fr);
+// ─────────────────────────────────────────────────────────────────────────────
 
 const samples = [
     Date.now(),
@@ -30,10 +45,13 @@ const samples = [
             now: fixedNow
         });
 
+        const frResult = formatSync(value, { locale: 'fr', now: fixedNow });
+
         console.log('time:', value);
         console.log(' async(es, round):', asyncResult);
         console.log(' sync(en, mini, floor):', syncResult);
         console.log(' parts(pt):', parts);
+        console.log(' custom(fr):', frResult);
         console.log('---');
     }
 })();

@@ -1,2 +1,2 @@
-export type locale = 'es' | 'en' | 'pt';
+export type locale = 'en' | 'es' | 'pt' | (string & {});
 //# sourceMappingURL=locale.d.ts.map
