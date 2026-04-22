@@ -1,4 +1,4 @@
-import { format, formatSync, formatToPartsSync, registerLocale } from '../src/index';
+import { createLiveFormat, format, formatSync, formatToPartsSync, registerLocale } from '../src/index';
 import type { localeDict } from '../src/index';
 
 // ── Locale custom (francés) registrado en runtime ─────────────────────────────
@@ -60,4 +60,21 @@ const samples = [
         console.log(' calendar(en):', calendarEn);
         console.log('---');
     }
+
+    // Live formatter: ideal para chat/feed sin recalcular manualmente
+    const live = createLiveFormat(Date.now() - 50 * 1000, {
+        locale: 'en'
+    });
+
+    const unsubscribe = live.subscribe((snapshot) => {
+        console.log(' live(en):', snapshot.formatted, `| next in ${snapshot.intervalMs}ms`);
+    });
+
+    live.start();
+
+    setTimeout(() => {
+        unsubscribe();
+        live.stop();
+        console.log(' live(en): stopped');
+    }, 3200);
 })();
