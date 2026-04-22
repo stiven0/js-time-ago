@@ -156,7 +156,7 @@ const resolveUnit = (difference: number): unit => {
     if (absolute < 86400000) return 'hour';
     if (absolute < 604800000) return 'day';
     if (absolute <= 2419000000) return 'week';
-    if (absolute <= 28910000000) return 'month';
+    if (absolute < 31536000000) return 'month';
     return 'year';
 };
 
