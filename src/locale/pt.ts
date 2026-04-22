@@ -3,6 +3,13 @@ import { localeDict } from '../types/locale-dict';
 export const pt: localeDict = {
     now: 'justo agora',
     nowMini: '0s',
+    calendar: {
+        yesterday: 'ontem',
+        today: 'hoje',
+        tomorrow: 'amanhã',
+        lastWeek: 'semana passada',
+        nextWeek: 'próxima semana'
+    },
     second: {
         past:   (n) => n === 1 ? '1 segundo atrás'  : `${n} segundos atrás`,
         future: (n) => n === 1 ? 'em 1 segundo'     : `em ${n} segundos`,

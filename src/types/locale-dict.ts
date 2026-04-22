@@ -4,6 +4,14 @@ export interface localeUnitDict {
     mini: (n: number) => string;
 }
 
+export interface localeCalendarDict {
+    yesterday: string;
+    today: string;
+    tomorrow: string;
+    lastWeek: string;
+    nextWeek: string;
+}
+
 export interface localeDict {
     now: string;
     nowMini: string;
@@ -14,4 +22,5 @@ export interface localeDict {
     week: localeUnitDict;
     month: localeUnitDict;
     year: localeUnitDict;
+    calendar?: localeCalendarDict;
 }

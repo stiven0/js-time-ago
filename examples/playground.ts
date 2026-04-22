@@ -19,6 +19,8 @@ const samples = [
     Date.now(),
     Date.now() - 90 * 1000,
     Date.now() + 2 * 60 * 60 * 1000,
+    Date.now() - 2 * 24 * 60 * 60 * 1000,
+    Date.now() + 2 * 24 * 60 * 60 * 1000,
     new Date(Date.now() - 8 * 24 * 60 * 60 * 1000)
 ];
 
@@ -46,12 +48,16 @@ const samples = [
         });
 
         const frResult = formatSync(value, { locale: 'fr', now: fixedNow });
+        const calendarEs = formatSync(value, { locale: 'es', now: fixedNow, calendar: true });
+        const calendarEn = formatSync(value, { locale: 'en', now: fixedNow, calendar: true });
 
         console.log('time:', value);
         console.log(' async(es, round):', asyncResult);
         console.log(' sync(en, mini, floor):', syncResult);
         console.log(' parts(pt):', parts);
         console.log(' custom(fr):', frResult);
+        console.log(' calendar(es):', calendarEs);
+        console.log(' calendar(en):', calendarEn);
         console.log('---');
     }
 })();

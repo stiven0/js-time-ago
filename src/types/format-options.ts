@@ -10,4 +10,6 @@ export interface formatOptions {
     rounding?: rounding;
     minUnit?: unit;
     maxUnit?: unit;
+    calendar?: boolean;
+    calendarThresholdDays?: number;
 }

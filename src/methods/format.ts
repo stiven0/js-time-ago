@@ -33,6 +33,8 @@ type resolvedOptions = {
     rounding: rounding;
     minUnit: unit;
     maxUnit: unit;
+    calendar: boolean;
+    calendarThresholdDays: number;
 };
 
 const isOptionsObject = (value: unknown): value is formatOptions => {
@@ -70,7 +72,11 @@ const resolveOptions = (
             now: normalizeNow(merged.now),
             rounding: merged.rounding ?? 'round',
             minUnit,
-            maxUnit
+            maxUnit,
+            calendar: merged.calendar ?? false,
+            calendarThresholdDays: Number.isFinite(merged.calendarThresholdDays)
+                ? Math.max(2, Math.floor(merged.calendarThresholdDays as number))
+                : 7
         };
     }
 
@@ -86,8 +92,48 @@ const resolveOptions = (
         now: normalizeNow(mergedFromLegacy.now),
         rounding: mergedFromLegacy.rounding ?? 'round',
         minUnit,
-        maxUnit
+        maxUnit,
+        calendar: mergedFromLegacy.calendar ?? false,
+        calendarThresholdDays: Number.isFinite(mergedFromLegacy.calendarThresholdDays)
+            ? Math.max(2, Math.floor(mergedFromLegacy.calendarThresholdDays as number))
+            : 7
     };
+};
+
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+const startOfDay = (value: number): number => {
+    const date = new Date(value);
+    date.setHours(0, 0, 0, 0);
+    return date.getTime();
+};
+
+const resolveCalendarText = (
+    time: number,
+    now: number,
+    local: locale,
+    thresholdDays: number,
+    selectedStyle: style
+): string | undefined => {
+    if (selectedStyle !== 'round') {
+        return undefined;
+    }
+
+    const dict = getLocaleDict(local);
+    if (!dict || !dict.calendar) {
+        return undefined;
+    }
+
+    const diffDays = (startOfDay(time) - startOfDay(now)) / DAY_IN_MS;
+
+    if (diffDays === -1) return dict.calendar.yesterday;
+    if (diffDays === 0) return dict.calendar.today;
+    if (diffDays === 1) return dict.calendar.tomorrow;
+
+    if (diffDays < -1 && diffDays >= -thresholdDays) return dict.calendar.lastWeek;
+    if (diffDays > 1 && diffDays <= thresholdDays) return dict.calendar.nextWeek;
+
+    return undefined;
 };
 
 const applyRounding = (value: number, mode: rounding): number => {
@@ -182,7 +228,10 @@ export const formatToPartsSync = (
     const tense: isPastOrFuture = normalizedTime > options.now ? 'future' : 'past';
     const selectedUnit = clampUnit(resolveUnit(difference), options.minUnit, options.maxUnit);
     const value = unitToNumber(difference, selectedUnit, options.rounding);
-    const formatted = render(value, selectedUnit, options.locale, tense, options.style);
+    const calendarText = options.calendar
+        ? resolveCalendarText(normalizedTime, options.now, options.locale, options.calendarThresholdDays, options.style)
+        : undefined;
+    const formatted = calendarText ?? render(value, selectedUnit, options.locale, tense, options.style);
 
     return {
         value,
