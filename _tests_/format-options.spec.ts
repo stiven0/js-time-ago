@@ -104,4 +104,16 @@ describe('format options api', () => {
         })).rejects.toThrow('unsupported options');
     });
 
+    test('throws error for invalid timeZone', async () => {
+        expect(() => formatSync(Date.now(), {
+            calendar: true,
+            timeZone: 'Invalid/Zone'
+        })).toThrow('unsupported options');
+
+        await expect(format(Date.now(), {
+            calendar: true,
+            timeZone: 'Invalid/Zone'
+        })).rejects.toThrow('unsupported options');
+    });
+
 });

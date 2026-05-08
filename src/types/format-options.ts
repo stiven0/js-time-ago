@@ -7,6 +7,7 @@ export interface formatOptions {
     locale?: locale;
     style?: style;
     now?: number | Date;
+    timeZone?: string;
     rounding?: rounding;
     minUnit?: unit;
     maxUnit?: unit;

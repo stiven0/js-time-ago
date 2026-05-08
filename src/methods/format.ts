@@ -30,6 +30,7 @@ type resolvedOptions = {
     locale: locale;
     style: style;
     now: number;
+    timeZone?: string;
     rounding: rounding;
     minUnit: unit;
     maxUnit: unit;
@@ -55,6 +56,22 @@ const normalizeNow = (now?: number | Date): number => {
     return normalizeTime(now);
 };
 
+const normalizeTimeZone = (timeZone?: string): string | undefined => {
+    if (typeof timeZone === 'undefined') {
+        return undefined;
+    }
+
+    if (typeof timeZone !== 'string' || !timeZone.trim()) {
+        throw new Error(INVALID_OPTIONS_MESSAGE);
+    }
+
+    try {
+        return new Intl.DateTimeFormat('en-US', { timeZone }).resolvedOptions().timeZone;
+    } catch {
+        throw new Error(INVALID_OPTIONS_MESSAGE);
+    }
+};
+
 const resolveOptions = (
     localOrOptions?: locale | formatOptions,
     styleOrOptions?: style | formatOptions
@@ -70,6 +87,7 @@ const resolveOptions = (
             locale: merged.locale ?? 'en',
             style: merged.style ?? 'round',
             now: normalizeNow(merged.now),
+            timeZone: normalizeTimeZone(merged.timeZone),
             rounding: merged.rounding ?? 'round',
             minUnit,
             maxUnit,
@@ -90,6 +108,7 @@ const resolveOptions = (
         locale: (localOrOptions as locale | undefined) ?? mergedFromLegacy.locale ?? 'en',
         style: (styleOrOptions as style | undefined) ?? mergedFromLegacy.style ?? 'round',
         now: normalizeNow(mergedFromLegacy.now),
+        timeZone: normalizeTimeZone(mergedFromLegacy.timeZone),
         rounding: mergedFromLegacy.rounding ?? 'round',
         minUnit,
         maxUnit,
@@ -108,12 +127,32 @@ const startOfDay = (value: number): number => {
     return date.getTime();
 };
 
+const getDayKey = (value: number, timeZone?: string): number => {
+    if (!timeZone) {
+        return startOfDay(value) / DAY_IN_MS;
+    }
+
+    const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).formatToParts(new Date(value));
+
+    const year = Number(parts.find((part) => part.type === 'year')?.value);
+    const month = Number(parts.find((part) => part.type === 'month')?.value);
+    const day = Number(parts.find((part) => part.type === 'day')?.value);
+
+    return Date.UTC(year, month - 1, day) / DAY_IN_MS;
+};
+
 const resolveCalendarText = (
     time: number,
     now: number,
     local: locale,
     thresholdDays: number,
-    selectedStyle: style
+    selectedStyle: style,
+    timeZone?: string
 ): string | undefined => {
     if (selectedStyle !== 'round') {
         return undefined;
@@ -124,7 +163,7 @@ const resolveCalendarText = (
         return undefined;
     }
 
-    const diffDays = (startOfDay(time) - startOfDay(now)) / DAY_IN_MS;
+    const diffDays = getDayKey(time, timeZone) - getDayKey(now, timeZone);
 
     if (diffDays === -1) return dict.calendar.yesterday;
     if (diffDays === 0) return dict.calendar.today;
@@ -229,7 +268,14 @@ export const formatToPartsSync = (
     const selectedUnit = clampUnit(resolveUnit(difference), options.minUnit, options.maxUnit);
     const value = unitToNumber(difference, selectedUnit, options.rounding);
     const calendarText = options.calendar
-        ? resolveCalendarText(normalizedTime, options.now, options.locale, options.calendarThresholdDays, options.style)
+        ? resolveCalendarText(
+            normalizedTime,
+            options.now,
+            options.locale,
+            options.calendarThresholdDays,
+            options.style,
+            options.timeZone
+        )
         : undefined;
     const formatted = calendarText ?? render(value, selectedUnit, options.locale, tense, options.style);
 

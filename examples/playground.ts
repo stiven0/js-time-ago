@@ -61,6 +61,24 @@ const samples = [
         console.log('---');
     }
 
+    // Validacion de calendar con zona horaria explicita
+    const tzNow = new Date('2026-04-21T01:30:00.000Z').getTime();
+    const tzTime = new Date('2026-04-20T23:30:00.000Z').getTime();
+    const calendarUtc = formatSync(tzTime, { locale: 'en', now: tzNow, calendar: true, timeZone: 'UTC' });
+    const calendarBogota = formatSync(tzTime, {
+        locale: 'en',
+        now: tzNow,
+        calendar: true,
+        timeZone: 'America/Bogota'
+    });
+
+    console.log('calendar(en, UTC):', calendarUtc);
+    console.log('calendar(en, America/Bogota):', calendarBogota);
+
+    if (calendarUtc !== 'yesterday' || calendarBogota !== 'today') {
+        throw new Error('timeZone validation failed in playground');
+    }
+
     // Live formatter: ideal para chat/feed sin recalcular manualmente
     const live = createLiveFormat(Date.now() - 50 * 1000, {
         locale: 'en'

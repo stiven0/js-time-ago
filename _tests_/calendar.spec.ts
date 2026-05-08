@@ -30,4 +30,23 @@ describe('calendar mode', () => {
         expect(formatSync(at(-1), { locale: 'en', now, calendar: true, style: 'mini' })).toEqual('1d');
     });
 
+    test('resolves calendar labels using provided timeZone', () => {
+        const tzNow = new Date('2026-04-21T01:30:00.000Z').getTime();
+        const tzTime = new Date('2026-04-20T23:30:00.000Z').getTime();
+
+        expect(formatSync(tzTime, {
+            locale: 'en',
+            now: tzNow,
+            calendar: true,
+            timeZone: 'UTC'
+        })).toEqual('yesterday');
+
+        expect(formatSync(tzTime, {
+            locale: 'en',
+            now: tzNow,
+            calendar: true,
+            timeZone: 'America/Bogota'
+        })).toEqual('today');
+    });
+
 });
