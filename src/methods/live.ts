@@ -13,6 +13,7 @@ export interface createLiveFormatOptions extends formatOptions {
     intervalMs?: number;
     immediate?: boolean;
     onUpdate?: (snapshot: liveFormatSnapshot) => void;
+    onError?: (error: Error) => void;
 }
 
 export interface liveFormatController {
@@ -20,6 +21,7 @@ export interface liveFormatController {
     subscribe: (listener: (snapshot: liveFormatSnapshot) => void) => () => void;
     start: () => void;
     stop: () => void;
+    destroy: () => void;
     updateTime: (time: number | Date) => void;
     isRunning: () => boolean;
 }
@@ -81,8 +83,14 @@ export const createLiveFormat = (
         }
 
         timer = setTimeout(() => {
-            current = buildSnapshot();
-            notify();
+            try {
+                current = buildSnapshot();
+                notify();
+            } catch (error) {
+                if (options.onError) {
+                    options.onError(error instanceof Error ? error : new Error('unknown error'));
+                }
+            }
             scheduleNext();
         }, current.intervalMs);
     };
@@ -111,6 +119,13 @@ export const createLiveFormat = (
             if (!timer) return;
             clearTimeout(timer);
             timer = null;
+        },
+        destroy: () => {
+            if (timer) {
+                clearTimeout(timer);
+                timer = null;
+            }
+            listeners.clear();
         },
         updateTime: (nextTime: number | Date) => {
             const normalizedTime = +nextTime;

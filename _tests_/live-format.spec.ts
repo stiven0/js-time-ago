@@ -1,4 +1,5 @@
 import { createLiveFormat } from '../src/index';
+import * as formatModule from '../src/methods/format';
 
 describe('createLiveFormat', () => {
     let now = 1713571200000;
@@ -75,5 +76,50 @@ describe('createLiveFormat', () => {
         jest.advanceTimersByTime(30000);
 
         expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    test('onError is called when buildSnapshot throws, timer keeps running', () => {
+        const errorHandler = jest.fn();
+        const controller = createLiveFormat(now - 45 * 1000, {
+            locale: 'en',
+            onError: errorHandler
+        });
+
+        // simula que el siguiente tick falla (ej. locale desregistrado en runtime)
+        jest.spyOn(formatModule, 'formatToPartsSync').mockImplementationOnce(() => {
+            throw new Error('locale not found');
+        });
+
+        controller.start();
+        jest.advanceTimersByTime(1000);
+
+        expect(errorHandler).toHaveBeenCalledTimes(1);
+        expect(errorHandler.mock.calls[0][0]).toBeInstanceOf(Error);
+        expect(controller.isRunning()).toEqual(true);
+
+        controller.stop();
+    });
+
+    test('destroy stops timer and clears all listeners', () => {
+        const controller = createLiveFormat(now - 45 * 1000, { locale: 'en' });
+        const listenerA = jest.fn();
+        const listenerB = jest.fn();
+
+        controller.subscribe(listenerA);
+        controller.subscribe(listenerB);
+        controller.start();
+
+        expect(controller.isRunning()).toEqual(true);
+
+        controller.destroy();
+
+        expect(controller.isRunning()).toEqual(false);
+
+        now += 1000;
+        jest.advanceTimersByTime(1000);
+
+        // solo el snapshot inmediato de subscribe, nada después de destroy
+        expect(listenerA).toHaveBeenCalledTimes(1);
+        expect(listenerB).toHaveBeenCalledTimes(1);
     });
 });

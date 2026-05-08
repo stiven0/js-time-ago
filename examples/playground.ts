@@ -95,4 +95,26 @@ const samples = [
         live.stop();
         console.log(' live(en): stopped');
     }, 3200);
+
+    // onError: el timer sigue vivo aunque haya un error en un tick
+    // En producción el error ocurriría si un locale se desregistra en runtime,
+    // o si ocurre cualquier excepción dentro del tick de cálculo.
+    // Patrón de uso:
+    const liveWithError = createLiveFormat(Date.now() - 10 * 1000, {
+        locale: 'en',
+        onError: (err) => console.log(' live onError (capturado sin romper el timer):', err.message)
+    });
+    console.log(' live onError registrado — isRunning antes de start:', liveWithError.isRunning());
+    liveWithError.start();
+    liveWithError.stop();
+
+    // destroy: limpia timer y listeners en una sola llamada (ideal para React useEffect)
+    const liveToDestroy = createLiveFormat(Date.now() - 5 * 1000, { locale: 'en' });
+    const unsub = liveToDestroy.subscribe((snap) =>
+        console.log(' live antes de destroy:', snap.formatted)
+    );
+    void unsub;
+    liveToDestroy.start();
+    liveToDestroy.destroy();
+    console.log(' live después de destroy, isRunning:', liveToDestroy.isRunning());
 })();
