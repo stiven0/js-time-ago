@@ -2,7 +2,7 @@
 
 A lightweight library to format relative time for past and future dates.
 
-Looking for advanced docs and deep examples? See the full guide: [docs/README.full.md](https://github.com/stiven0/js-time-ago/blob/main/docs/README.full.md)
+Looking for advanced docs and deep examples? See the full guide: [docs/README.full.md](docs/README.full.md).
 
 ## What It Does
 
