@@ -1,4 +1,4 @@
-import '../locale/index'; // registra los built-in locales
+import '../locale/index';
 import { getLocaleDict } from '../locale/registry';
 import { isPastOrFuture } from '../types/is-past-or-future';
 import { formatOptions } from '../types/format-options';
