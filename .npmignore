@@ -3,8 +3,12 @@ package-lock.json
 
 # dev
 src/
+examples/
 nodemon.json
 tsconfig.json
+tsconfig.cjs.json
+tsconfig.esm.json
+tsconfig.types.json
 
 # tests
 _tests_

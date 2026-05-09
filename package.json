@@ -1,17 +1,32 @@
 {
     "name": "js-time-ago",
-    "version": "3.1.0",
+    "version": "4.0.0",
     "description": "A simple and easy library to determine how long ago an event occurred or will occur",
     "author": "stiven0",
     "license": "MIT",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/types/index.d.ts",
+    "sideEffects": false,
+    "exports": {
+        ".": {
+            "import": "./dist/esm/index.js",
+            "require": "./dist/cjs/index.js",
+            "types": "./dist/types/index.d.ts"
+        }
+    },
+    "files": [
+        "dist"
+    ],
     "keywords": [
         "timeago",
         "time",
         "javascript",
         "ago",
-        "javascript-timeago"
+        "javascript-timeago",
+        "esm",
+        "cjs",
+        "relative-time"
     ],
     "devDependencies": {
         "@types/jest": "^26.0.10",
@@ -34,9 +49,14 @@
         "clean-dist": "rimraf dist",
         "clean-coverage": "rimraf coverage",
         "test": "jest --watch",
+        "test:ci": "jest --runInBand",
         "test:coverage": "jest --coverage",
-        "dev": "nodemon src/index.ts",
-        "build": "tsc",
-        "start": "npm run clean-dist && npm run build && node dist/index.js"
+        "playground": "ts-node examples/playground.ts",
+        "dev:playground": "nodemon --watch examples --watch src --ext ts --exec \"ts-node examples/playground.ts\"",
+        "build:cjs": "tsc -p tsconfig.cjs.json",
+        "build:esm": "tsc -p tsconfig.esm.json",
+        "build:types": "tsc -p tsconfig.types.json",
+        "build": "npm run clean-dist && npm run build:cjs && npm run build:esm && npm run build:types",
+        "start": "npm run build && node dist/cjs/index.js"
     }
 }

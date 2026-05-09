@@ -1,1 +1,12 @@
-export { format } from './methods/index'; 
+export { format, formatSync, formatToParts, formatToPartsSync } from './methods/index';
+export { createLiveFormat } from './methods/live';
+export { registerLocale } from './locale/registry';
+export type { localeDict, localeUnitDict } from './types/locale-dict';
+export type { createLiveFormatOptions, liveFormatController, liveFormatSnapshot } from './methods/live';
+export type { formatOptions } from './types/format-options';
+export type { formatParts } from './types/format-parts';
+export type { locale } from './types/locale';
+export type { unit } from './types/unit';
+export type { style } from './types/style';
+export type { rounding } from './types/rounding';
+export type { isPastOrFuture } from './types/is-past-or-future';

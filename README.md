@@ -1,135 +1,200 @@
 # js-time-ago
 
-[![npm version](https://img.shields.io/npm/v/js-time-ago.svg?style=flat-square)](https://www.npmjs.com/package/js-time-ago)
-[![npm downloads](https://img.shields.io/npm/dw/js-time-ago.svg?style=flat-square)](https://www.npmjs.com/package/js-time-ago)
+A lightweight library to format relative time for past and future dates.
 
-> A simple and easy library to determine how long ago an event occurred or will occur
-## Language support
+Looking for advanced docs and deep examples? See the full guide: [docs/README.full.md](docs/README.full.md).
 
-Currently there is support for three languages:
-- en - English
-- es - Spanish
-- pt - Portuguese
+## What It Does
 
-you will get a result like this:
+- Formats relative time in past and future.
+- Supports two styles: `round` and `mini`.
+- Supports `calendar` labels: `yesterday`, `today`, `tomorrow`, `last week`, `next week`.
+- Supports `timeZone` in calendar mode using `Intl.DateTimeFormat`.
+- Provides a live formatter for auto-updating UI labels.
+- Includes built-in locales: `en`, `es`, `pt`.
+- Allows runtime custom locales.
 
-**English by fault**
+## Install
 
-- _right now_
-- _10 seconds ago_
-- _in 10 second_
-- _1 minute ago_
-- _in 1 minute_
-- _1 hour ago_
-- _in 1 hour_
-- _1 day ago_
-- _in 1 day_
-- _1 week ago_
-- _in 1 week_
-- _1 month ago_
-- _in 1 month_
-- _1 year ago_
-- _in 1 year_
-
-## Installation 🔧
-
-This package is available through [npm registration](https://www.npmjs.com/).
-
-```
+```bash
 npm install js-time-ago
 ```
 
+## Quick Start
 
-## Usage 🚀
+```ts
+import { formatSync, format } from 'js-time-ago';
 
-```js
+const now = Date.now();
 
-import { format } from 'js-time-ago';
+console.log(formatSync(now - 90_000, { locale: 'en' }));
+// 2 minutes ago
 
-// we specify the date and the language in which we will receive the answer
-format( Date.now(), 'en' )
-    .then( console.log );
-    // right now
+const next = await format(now + 2 * 60_000, { locale: 'es' });
+console.log(next);
+// dentro de 2 minutos
+```
 
-// support async / await
-(async () => {
+## Main API
 
-    const response = await format( Date.now() + 2 * 60 * 1000, 'es' );
-    console.log( response );
-    // dentro de 2 minutos
+- `formatSync(time, options)` -> `string`
+- `format(time, options)` -> `Promise<string>`
+- `formatToPartsSync(time, options)` -> structured parts
+- `formatToParts(time, options)` -> `Promise<parts>`
+- `createLiveFormat(time, options)` -> live controller
+- `registerLocale(name, dict)` -> add custom locale
 
-})();
+## Important Options
 
+- `locale`: output language (`en`, `es`, `pt`, or custom)
+- `style`: `round` or `mini`
+- `now`: deterministic reference time
+- `timeZone`: IANA zone for calendar mode, for example `UTC`, `America/Bogota`
+- `rounding`: `round`, `floor`, `ceil`
+- `calendar`: enables calendar labels
+- `calendarThresholdDays`: threshold for week labels
+- `minUnit` / `maxUnit`: clamp output unit range
 
-const getTime = async (time, local) => {
-    const response = await format( time, local ); 
-    console.log( response );
-    // 1 mês atrás
-};
+## Calendar + Time Zone Example
 
-getTime( Date.now() - 1 * 4 * 7 * 24 * 60 * 60 * 1000, 'pt' );
+```ts
+import { formatSync } from 'js-time-ago';
 
-// use with angular pipe
-import { Pipe, PipeTransform } from '@angular/core';
-import { format } from 'js-time-ago';
+const now = new Date('2026-04-21T01:30:00.000Z').getTime();
+const value = new Date('2026-04-20T23:30:00.000Z').getTime();
 
-@Pipe({
-    name: 'jstimeago'
-})
+console.log(formatSync(value, { locale: 'en', now, calendar: true, timeZone: 'UTC' }));
+// yesterday
 
-export class JsTimeAgoPipe implements PipeTransform {
+console.log(formatSync(value, { locale: 'en', now, calendar: true, timeZone: 'America/Bogota' }));
+// today
+```
 
-    async transform(date: number | Date): Promise<string> {
-        return await format( date, 'en' );
-    }
+## Live Formatter Example
+
+```ts
+import { createLiveFormat } from 'js-time-ago';
+
+const live = createLiveFormat(Date.now() - 45_000, {
+  locale: 'en',
+  onError: (error) => console.error(error.message)
+});
+
+const unsubscribe = live.subscribe((snapshot) => {
+  console.log(snapshot.formatted, snapshot.intervalMs);
+});
+
+live.start();
+
+setTimeout(() => {
+  unsubscribe();
+  live.destroy();
+}, 5000);
+```
+
+## Framework Snippets
+
+### React
+
+```tsx
+import { useEffect, useMemo, useState } from 'react';
+import { createLiveFormat } from 'js-time-ago';
+
+export function TimeAgo({ value }: { value: number | Date }) {
+  const [text, setText] = useState('');
+  const live = useMemo(() => createLiveFormat(value, { locale: 'en' }), [value]);
+
+  useEffect(() => {
+    const off = live.subscribe((s) => setText(s.formatted));
+    live.start();
+    return () => {
+      off();
+      live.destroy();
+    };
+  }, [live]);
+
+  return <span>{text}</span>;
 }
-
-// import pipe in declarations and use it in html component
-<span>{{ date | jstimeago | async }}</span>
-
-
 ```
 
-## Styles
+### Vue 3
 
-List of supported "styles".
+```ts
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue';
+import { createLiveFormat } from 'js-time-ago';
 
-### Round
+const props = defineProps<{ value: number | Date }>();
+const text = ref('');
+const live = createLiveFormat(props.value, { locale: 'es' });
 
-```js
+onMounted(() => {
+  live.subscribe((s) => { text.value = s.formatted; });
+  live.start();
+});
 
-format( Date.now(), 'en', 'round' ).then( console.log );
-// right now
+onUnmounted(() => live.destroy());
+</script>
 
-format( Date.now() - 1 * 1000, 'en', 'round' ).then( console.log );
-// 1 second ago
-
-format( Date.now() - 1 * 60 * 60 * 1000, 'en', 'round' ).then( console.log );
-// 1 hour ago
-
-format( Date.now() - 1 * 7 * 24 * 60 * 60 * 1000, 'en', 'round' ).then( console.log );
-// 1 week ago
-
+<template>
+  <span>{{ text }}</span>
+</template>
 ```
 
-### Mini
+### Node.js
 
-```js
+```ts
+import { formatSync } from 'js-time-ago';
 
-format( Date.now(), 'en', 'mini' ).then( console.log );
-// 0s
-
-format( Date.now() - 1 * 1000, 'en', 'mini' ).then( console.log );
-// 1s
-
-format( Date.now() - 1 * 60 * 60 * 1000, 'en', 'mini' ).then( console.log );
-// 1h
-
-format( Date.now() - 1 * 7 * 24 * 60 * 60 * 1000, 'en', 'mini' ).then( console.log );
-// 1week
-
+console.log(formatSync(Date.now() - 3 * 60 * 60 * 1000, {
+  locale: 'en',
+  calendar: true,
+  timeZone: 'UTC'
+}));
 ```
 
-## License 📄
+### Angular
 
-  [MIT](LICENSE)
+```ts
+import { Pipe, PipeTransform } from '@angular/core';
+import { createLiveFormat } from 'js-time-ago';
+
+@Pipe({ name: 'jstimeago', standalone: true, pure: false })
+export class JsTimeAgoPipe implements PipeTransform {
+  private text = '';
+  private live: ReturnType<typeof createLiveFormat> | null = null;
+
+  transform(value: number | Date): string {
+    if (!this.live) {
+      this.live = createLiveFormat(value, { locale: 'en' });
+      this.live.subscribe((s) => { this.text = s.formatted; });
+      this.live.start();
+    }
+    return this.text;
+  }
+
+  ngOnDestroy(): void {
+    this.live?.destroy();
+  }
+}
+```
+
+## TypeScript Exports
+
+You can import main types directly from the package:
+
+```ts
+import type {
+  formatOptions,
+  formatParts,
+  locale,
+  unit,
+  style,
+  rounding,
+  isPastOrFuture
+} from 'js-time-ago';
+```
+
+## License
+
+[MIT](LICENSE)

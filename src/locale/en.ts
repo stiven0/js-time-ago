@@ -1,3 +1,53 @@
+import { localeDict } from '../types/locale-dict';
+
+export const en: localeDict = {
+    now: 'right now',
+    nowMini: '0s',
+    calendar: {
+        yesterday: 'yesterday',
+        today: 'today',
+        tomorrow: 'tomorrow',
+        lastWeek: 'last week',
+        nextWeek: 'next week'
+    },
+    second: {
+        past:   (n) => n === 1 ? '1 second ago'  : `${n} seconds ago`,
+        future: (n) => n === 1 ? 'in 1 second'   : `in ${n} seconds`,
+        mini:   (n) => `${n}s`
+    },
+    minute: {
+        past:   (n) => n === 1 ? '1 minute ago'  : `${n} minutes ago`,
+        future: (n) => n === 1 ? 'in 1 minute'   : `in ${n} minutes`,
+        mini:   (n) => `${n}m`
+    },
+    hour: {
+        past:   (n) => n === 1 ? '1 hour ago'    : `${n} hours ago`,
+        future: (n) => n === 1 ? 'in 1 hour'     : `in ${n} hours`,
+        mini:   (n) => `${n}h`
+    },
+    day: {
+        past:   (n) => n === 1 ? '1 day ago'     : `${n} days ago`,
+        future: (n) => n === 1 ? 'in 1 day'      : `in ${n} days`,
+        mini:   (n) => `${n}d`
+    },
+    week: {
+        past:   (n) => n === 1 ? '1 week ago'    : `${n} weeks ago`,
+        future: (n) => n === 1 ? 'in 1 week'     : `in ${n} weeks`,
+        mini:   (n) => n === 1 ? '1week' : `${n}weeks`
+    },
+    month: {
+        past:   (n) => n === 1 ? '1 month ago'   : `${n} months ago`,
+        future: (n) => n === 1 ? 'in 1 month'    : `in ${n} months`,
+        mini:   (n) => n === 1 ? '1month' : `${n}months`
+    },
+    year: {
+        past:   (n) => n === 1 ? '1 year ago'    : `${n} years ago`,
+        future: (n) => n === 1 ? 'in 1 year'     : `in ${n} years`,
+        mini:   (n) => n === 1 ? '1year' : `${n}years`
+    }
+};
+
+// --- Legacy exports (kept for backward compatibility) ---
 import { isPastOrFuture } from "../types/is-past-or-future";
 import { style } from "../types/style";
 
